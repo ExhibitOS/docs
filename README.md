@@ -25,3 +25,7 @@ T00-02에서 toolchain·지원 환경·build/lint/typecheck/test 명령을 확�
 작업 전 [AGENTS.md](AGENTS.md)를 읽고 `codex/<작업명>` 브랜치와 PR로 변경한다. 일반 문제는 이 저장소의 Issue/PR에서 다룬다. 취약점·토큰·비공개 작품을 일반 Issue에 게시하지 않는다. GitHub private vulnerability reporting이 활성화돼 있으면 사용하고, 없으면 조직 관리자에게 비공개 보고한다. 아직 전용 보안 연락처나 security reporting 기능이 설정됐다고 가정하지 않는다.
 
 기획·상태 조정 자료는 접근 권한이 있는 에이전트가 operations에서 확인한다. 제품의 빌드와 배포는 이 운영 문서 없이 실행할 수 있어야 한다.
+
+## 검토 중인 프로젝트 정책
+
+[초기 라이선스·공개·CI 비용 정책 제안](developer/license-policy-proposal.md)은 아직 적용하지 않은 검토 문서다.
