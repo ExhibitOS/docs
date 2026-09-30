@@ -1,0 +1,27 @@
+ExhibitOS documentation licensing
+
+This file defines the scope of the unmodified license texts in LICENSES/.
+
+Project-owned prose and diagrams in Markdown documentation, including README.md
+and AGENTS.md, are licensed under CC-BY-4.0. See LICENSES/CC-BY-4.0.txt.
+Use attribution: ExhibitOS contributors, the original document URL, a link to
+CC-BY-4.0, and an indication of changes when sharing adapted documentation.
+Retain supplied author, copyright and disclaimer information.
+
+Executable examples in fenced code blocks and project-owned source, configuration,
+build and verification scripts are licensed under Apache-2.0. This code exception
+takes precedence over the surrounding documentation license.
+See LICENSES/Apache-2.0.txt. Retain relevant copyright and attribution notices,
+provide the license, indicate modified files, and carry required upstream NOTICEs.
+
+Third-party quotations, code, media, dependencies and their notices retain their
+original terms. Explicit per-file notices override this default mapping.
+LICENSES/*.txt are unmodified legal texts and are not relicensed as project prose.
+
+These licenses do not grant trademark rights or change the rights in imported
+artworks or personal data. This repository contains no such artwork assets today.
+Review rights and record provenance before adding them.
+
+Official source texts:
+https://creativecommons.org/licenses/by/4.0/legalcode.txt
+https://www.apache.org/licenses/LICENSE-2.0.txt

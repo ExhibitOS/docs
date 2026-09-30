@@ -1,0 +1,28 @@
+{
+  "format": 1,
+  "status": "applied-on-this-commit",
+  "default_rules": [
+    {
+      "scope": "Project-owned Markdown prose and diagrams, including README.md and AGENTS.md",
+      "license": "CC-BY-4.0",
+      "text": "LICENSES/CC-BY-4.0.txt"
+    },
+    {
+      "scope": "Executable fenced examples and project-owned source/config/build/verification scripts",
+      "license": "Apache-2.0",
+      "text": "LICENSES/Apache-2.0.txt",
+      "precedence": "Overrides surrounding prose license"
+    }
+  ],
+  "exceptions": [
+    "Third-party works and quotations retain their own terms",
+    "Explicit per-file notice takes precedence",
+    "LICENSES legal texts remain unmodified"
+  ],
+  "attribution": {
+    "creator": "ExhibitOS contributors",
+    "source": "Original document URL",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "changes": "Indicate modifications and retain prior change notices"
+  }
+}

@@ -1,0 +1,2 @@
+# Preserve the unmodified official legal text, including its final blank line.
+LICENSES/CC-BY-4.0.txt whitespace=-blank-at-eof
