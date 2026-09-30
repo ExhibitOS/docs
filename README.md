@@ -28,4 +28,12 @@ T00-02에서 toolchain·지원 환경·build/lint/typecheck/test 명령을 확�
 
 ## 검토 중인 프로젝트 정책
 
-[초기 라이선스·공개·CI 비용 정책 제안](developer/license-policy-proposal.md)은 아직 적용하지 않은 검토 문서다.
+[초기 라이선스·공개·CI 비용 정책 제안](developer/license-policy-proposal.md)은 정책 선택의 연구 기록이다. 현재 이 저장소의 적용 범위는 아래 LICENSE를 따른다.
+
+## 라이선스
+
+프로젝트 소유 설명문·도표는 **CC-BY-4.0**, 실행 가능한 fenced 예제와 코드·설정·스크립트는 **Apache-2.0**입니다.
+[적용 범위](LICENSE), [기계가 읽는 범위 매핑](license-map.json),
+[CC BY 원문](LICENSES/CC-BY-4.0.txt), [Apache 원문](LICENSES/Apache-2.0.txt)을 확인하세요.
+문서를 공유할 때 제공된 저자/저작권/면책 정보, 원본 URL과 license 링크를 유지하고 변경을 표시합니다.
+외부 인용·코드·media는 원래 조건을 유지하며 프로젝트 license가 사용자 작품이나 상표를 허가하지 않습니다.
