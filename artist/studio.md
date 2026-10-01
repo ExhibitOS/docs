@@ -3,7 +3,7 @@
 Studio 개발판의 `/studio`는 계정 없이 전시 문서의 로컬 초안을 만들고,
 방·벽·바닥·천장·문·창문과 표면 재질을 편집하며 제한된 3D 미리보기로 확인하는
 화면이다. 같은 문서를 JSON으로 편집·자동 저장하고 이력과 파일 백업으로 복원한다.
-작품 배치 편집기, 작품 Viewer와 publication은 후속 기능이다.
+승인된 CMS 작품의 실제 치수 배치·벽 정렬·조명·관람 설정도 구현·검증되었다. 전체 Viewer·Runtime와 publication은 후속 기능이다.
 실행 명령과 검사 환경은 [Platform README](https://github.com/ExhibitOS/platform#readme),
 API와 저장 형식은 [Studio 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio.md),
 공간·재질 계약은 [공간 편집 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-geometry.md)를 따른다.
@@ -20,7 +20,8 @@ API와 저장 형식은 [Studio 안내](https://github.com/ExhibitOS/platform/bl
 작품 배치·transform, navigation·accessibility와 작품 snapshot을 문서에 보존한다.
 단위는 meter, 좌표계는 right-handed Y-up이며 현재 규격은 `1.0.0-draft.1`이다.
 잘못된 구조·참조·단위·quaternion 등은 거부하고 마지막 완료된 저장본을 유지한다.
-작품 파일 bytes는 이 단계에서 가져오거나 검증하지 않는다. 편집 입력은 UTF-8
+로컬 JSON 편집과 백업은 작품 파일 bytes를 포함하거나 검증하지 않는다. 아래의
+온라인 작품 미리보기는 승인된 derivative만 별도로 요청한다. 편집 입력은 UTF-8
 1,000,000 bytes, 서버 전체 요청은 wrapper 포함 1 MiB 한도다. 공개 규격의
 문서 한도에 가까운 JSON도 입력·요청 한도 때문에 거부될 수 있다.
 
@@ -92,9 +93,115 @@ POST/PUT에서 같은 검사를 수행하고 다른 확장 namespace는 보존�
 숫자 편집과 JSON 백업을 사용할 수 있다. 재질의 시각적 결과는 조명과 브라우저에
 따라 달라진다.
 
-이 화면은 공간 형상 확인용이다. 작품 파일 bytes를 불러오거나 검증하지 않고,
-작품 배치 편집·전체 Viewer·전시 공개를 제공하지 않는다. 곡선벽·계단·벽 두께·충돌
-물리·imported mesh 방이나 조명 시뮬레이션도 지원하지 않는다.
+공간 형상만 편집하는 절차는 작품 파일 bytes를 불러오거나 검증하지 않는다.
+작품 미리보기 조건은 아래에 따르며 전체 Viewer·전시 공개는 제공하지 않는다.
+곡선벽·계단·벽 두께·충돌 물리·imported mesh 방이나 물리적 조도 측정도 지원하지 않는다.
+
+## 작품 배치·조명·관람 설정
+
+이 절차는 독립 검증 후 반영된 Studio authoring 기능용이다. API·저장 계약과
+검증 범위는 [Platform 작품 배치 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-placement.md)를
+따른다. 아래 미리보기와 저장 기능은 전체 Viewer나 전시 공개를 의미하지 않는다.
+
+### 승인된 CMS 작품 가져오기
+
+먼저 방을 만들거나 기존 방이 있는 로컬 초안을 연다. 온라인에서 [Artist CMS](cms.md)에
+로그인하고 Studio에서 현재 서버 계정을 명시적으로 확인한다. ‘작품·조명·관람 편집’의
+‘CMS 작품 ID’에 검토 후 현재 revision이 승인된 GLB 또는 PNG 작품 ID를 입력하고
+‘승인된 CMS 작품 가져오기’를 누른다. 파일 URL이나 원본 저장 경로를 입력하는 기능은 아니다.
+
+서버는 현재 session·기관·작품 접근권한·승인과 작품 및 asset의 display 권리를 검사한다.
+Artist는 자신의 작품을 사용하고 admin은 같은 기관에서 작업한다. Curator는 기존
+assigned-exhibition 정책을 따르며 임의의 private 작품을 검색할 권한을 얻지 않는다.
+Viewer는 이 authoring metadata 가져오기를 사용할 수 없다. 승인되지 않았거나 수정으로
+승인이 오래된 작품, 철회된 권리, 허가되지 않은 다른 소유자·기관 접근은 거부한다.
+
+가져오는 문서는 공개 Artwork snapshot과 안정적인 revision UUID다. Private authoring
+notes·원본 storage key·원본 URL은 포함하지 않는다. Snapshot의 inventory `assets/...`
+경로는 metadata 이름이며 브라우저 다운로드 URL이 아니다. 같은 origin의 제한된 CMS
+미리보기만 서버에 별도로 요청한다. 저장된 snapshot이 있다는 이유만으로 작품 bytes에
+접근할 수 있는 것은 아니다.
+
+### 실제 치수 배치와 벽 정렬
+
+‘배치할 작품’과 ‘배치·camera 소유 방’을 선택하고 ‘실제 크기로 작품 배치’를 누른다.
+새 배치는 meter 치수와 scale `[1,1,1]`을 사용하며 중심을 작품 높이의 절반에 두어
+바닥 위에 놓는다. 작품 목록에서 제목·credit line과 현재 scale을 반영한 치수를 확인한다.
+기존 JSON의 scale은 수동 위치·회전 편집으로 초기화하지 않는다.
+
+‘작품 배치 선택’에서 배치를 고르고 방 기준 XYZ 위치와 정규화된 XYZW quaternion을
+입력한 뒤 ‘작품 수동 위치·회전 적용’을 누른다. 벽에 맞추려면 같은 방의 ‘정렬할 벽’을
+고르고 벽 중심 기준 offset의 X·Y와 ‘snap 간격 (m)’을 입력한 뒤 ‘벽 내부 정렬·snap 적용’을
+누른다. Offset의 Z는 벽 정렬 계산에 사용하지 않는다. Snap은 음수가 아닌 유한한 값이며
+`0`이면 반올림하지 않는다. 예를 들어 간격 `0.1`m에서 offset `0.26`m는 `0.3`m가 된다.
+
+벽 정렬은 벽의 회전과 위치를 한 번 적용해 방 좌표의 배치를 만든다. 작품 전체가 벽
+밖으로 나가거나 문·창문과 겹치면 이전 문서와 이력을 유지하고 거부한다. 정렬을 적용한
+시점의 검사이며 이후 수동 이동의 연속 충돌 방지는 제공하지 않는다. 삭제를 막는 조명
+등의 참조는 먼저 해제한다.
+
+온라인 미리보기는 현재 권한과 승인 revision이 일치하는 watermarked CMS derivative를
+사용한다. Bytes 요청에서도 revision을 확인하므로 가져오기 이후 작품이 변경되면 오래된
+snapshot에 새 작품을 대신 표시하지 않는다. 이 검사는 요청·다시 열기 시점에 수행하며
+이미 받은 bytes를 원격으로 지우지는 않는다. GLB bounds를 승인된 물리 치수에 맞추고
+PNG는 물리 크기의 평면에 표시한다. GLB의 외부 resource는 거부한다. 원본 download·export
+권리는 별도다. 오프라인이나 권한·revision 확인 실패 시 점선으로 표시한 실제 치수
+metadata bounds를 유지하고 bytes 사용 불가를 표시한다.
+
+### 조명과 관람 camera
+
+‘point 조명 추가’ 또는 ‘spotlight 추가’를 누르고 조명을 선택해 방 기준 위치, 색상과
+candela 밝기를 입력한 뒤 ‘조명 속성 적용’을 누른다. Spotlight는 beam angle을 radian으로
+입력하고 선택적 작품 배치 target을 지정할 수 있다. Target 없이 기존 회전 방향을 사용할
+수 있다. JSON에 있는 directional 조명도 표시하고 area 조명은 point로 근사한다.
+이 미리보기는 물리적으로 인증된 조명 시뮬레이션이 아니며 shadow·노출 보정·light baking은
+제공하지 않는다.
+
+작품 배치를 선택하고 양수 관람 거리와 관람 높이를 입력한 뒤 ‘선택 작품 관람 camera
+준비’를 누른다. 준비는 선택 작품의 방을 현재 ‘배치·camera 소유 방’으로 설정하고,
+방 좌표의 작품 위치 `[x,y,z]`에서 camera 위치 `[x,관람 높이,z + 거리]`와 target
+`[x,y,z]`를 입력 필드에 만든다. 작품 회전이나 벽 방향에 맞춰 자동 보행 경로를 만드는
+기능은 아니다. 위치·target·FOV와 현재 방을 확인하고 ‘시작 camera 적용’을 눌러 저장한다.
+
+Camera 위치는 참조하는 방 내부여야 하며 target과 같을 수 없다. FOV는 10–120도다.
+예를 들어 작품 중심 `[0,1,0]`, 높이 `1.6`m, 거리 `2`m면 camera 위치는 `[0,1.6,2]`다.
+이 위치가 선택한 방 안에 들어가는지 확인한다. 같은 camera 필드와 이름으로 ‘viewpoint
+추가’를 누르고 미리보기의 시작 camera·viewpoint 버튼으로 확인할 수 있다.
+전시 제목과 credits도 각각 적용 버튼으로 저장한다. Credits 입력은 작품의 필수 credit
+line을 대체하지 않는다.
+
+### 선택적 추천 동선과 복원
+
+‘선택 가능한 추천 동선’에서 이름을 정하고 ‘현재 camera로 waypoint 준비’로 방 ID와
+meter 위치의 JSON을 만든다. Waypoint를 검토·수정하고 ‘추천 동선 추가’를 누른다.
+저장된 추천 동선을 삭제하거나 자유 시점 조작을 계속 사용할 수 있다. 이 UI가 저장하는
+`accessible: true`는 실제 접근성·통행 가능성의 검증 결과가 아니므로 경로의 접근성을
+별도로 검토한다. 방문자 guided tour나 접근성 tour runtime은 아직 제공하지 않는다.
+
+작품·조명·제목·credits·camera·동선 명령은 공간 편집과 같은 전체 문서 검증, 로컬 CAS
+자동 저장, 선택적 서버 revision과 최근 20개 session undo/redo를 사용한다. 잘못된
+입력·참조·camera는 이전 문서와 이력을 유지한다. 다시 열기·JSON 교체·복구·서버 적용은
+session 명령 이력을 새로 시작하며 저장된 로컬 복원 이력은 별도다.
+
+### Presentation 확장과 미리보기 제한
+
+선택적 `org.exhibitos.studio/presentation` version 1은 `version`, `viewpoints`,
+`credits`와 선택적 `startCamera`를 저장한다. Camera는 `roomId`, 방 기준 3개 숫자의
+`position`·`target`, `fov`로 구성한다. Viewpoint는 고유 UUID `id`와 비어 있지 않은
+최대 512 UTF-16 code units의 `name`도 가진다. 최대 64개 viewpoint, credits
+4096 UTF-16 code units, 직렬화된 확장
+32 KiB이고 camera 좌표는 유한하며 절댓값 10,000m 이내여야 한다.
+
+알 수 없는 자체 확장 버전·필드는 브라우저와 일반 서버 draft 쓰기에서도 거부한다.
+다른 namespace를 유지하며 기본 OES 버전과 database schema는 바뀌지 않는다.
+확장이 없는 기존 문서는 빈 credits·viewpoints와 시작 camera 없음으로 취급한다.
+다른 OES 클라이언트는 이 선택적 확장을 무시할 수 있다.
+
+검증된 미리보기는 기존 공간 한도에 더해 작품 배치·조명을 각각 128개로 제한한다.
+문서와 숫자 편집·백업은 WebGL 실패에도 보존한다. 이 기능은 제한된 authoring
+미리보기이며 일반 모바일 GPU 지원, 전체 Viewer·Runtime·anonymous display·OEX 패키징·
+전시 공개는 후속 구현이다. 오프라인은 앱 shell과 저장된 metadata 편집만 제공하며
+protected 작품 bytes를 캐시하지 않는다. JSON 백업에도 작품 파일 bytes는 포함하지 않는다.
 
 ## 저장 실패와 이력 복원
 
