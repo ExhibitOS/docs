@@ -3,7 +3,8 @@
 Studio 개발판의 `/studio`는 계정 없이 전시 문서의 로컬 초안을 만들고,
 방·벽·바닥·천장·문·창문과 표면 재질을 편집하며 제한된 3D 미리보기로 확인하는
 화면이다. 같은 문서를 JSON으로 편집·자동 저장하고 이력과 파일 백업으로 복원한다.
-승인된 CMS 작품의 실제 치수 배치·벽 정렬·조명·관람 설정도 구현·검증되었다. 명시적 publication은 독립 검증 중인 T03-04 후보이며 아래에 후보 절차를 기록한다.
+승인된 CMS 작품의 실제 치수 배치·벽 정렬·조명·관람 설정과 저장된 서버 revision의
+명시적 publication·철회·제한된 익명 미리보기도 구현·검증되었다.
 전체 Viewer·Runtime는 후속 기능이다.
 실행 명령과 검사 환경은 [Platform README](https://github.com/ExhibitOS/platform#readme),
 API와 저장 형식은 [Studio 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio.md),
@@ -96,7 +97,7 @@ POST/PUT에서 같은 검사를 수행하고 다른 확장 namespace는 보존�
 
 공간 형상만 편집하는 절차는 작품 파일 bytes를 불러오거나 검증하지 않는다.
 작품 미리보기 조건은 아래에 따른다. 공간 편집만으로 전시를 공개하지 않으며
-공개는 별도 후보 절차를 사용한다. 전체 Viewer는 제공하지 않는다.
+공개는 별도 공개 절차를 사용한다. 전체 Viewer는 제공하지 않는다.
 곡선벽·계단·벽 두께·충돌 물리·imported mesh 방이나 물리적 조도 측정도 지원하지 않는다.
 
 ## 작품 배치·조명·관람 설정
@@ -202,7 +203,7 @@ session 명령 이력을 새로 시작하며 저장된 로컬 복원 이력은 �
 검증된 미리보기는 기존 공간 한도에 더해 작품 배치·조명을 각각 128개로 제한한다.
 문서와 숫자 편집·백업은 WebGL 실패에도 보존한다. 이 기능은 제한된 authoring
 미리보기이며 일반 모바일 GPU 지원, 전체 Viewer·Runtime·OEX 패키징은 후속 구현이다.
-Anonymous 공개는 아래 별도 후보 절차를 사용한다. 오프라인은 앱 shell과 저장된 metadata 편집만 제공하며
+Anonymous 공개는 아래 별도 공개 절차를 사용한다. 오프라인은 앱 shell과 저장된 metadata 편집만 제공하며
 protected 작품 bytes를 캐시하지 않는다. JSON 백업에도 작품 파일 bytes는 포함하지 않는다.
 
 ## 저장 실패와 이력 복원
@@ -252,12 +253,11 @@ Artist·curator는 자신의 초안을 관리하며 admin은 같은 기관의 �
 새 앱 버전은 명시적인 적용 또는 이전 탭이 닫힌 뒤 활성화된다. 적용 전에
 파일 백업을 보관한다. 앱 코드의 캐시 성공과 초안의 장기 보존은 별개다.
 
-## READY 검사·명시적 공개·철회 후보
+## READY 검사·명시적 공개·철회
 
-이 절차는 독립 검증 중인 T03-04 개발 후보용이다. 제품 acceptance와 merge가 끝나기
-전에는 완료된 공개 기능으로 보지 않는다. API와 최종 검증 범위는
-[Platform 공개 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-publication.md)에
-기록하며 이 링크의 main 반영은 제품 merge 후 이뤄진다.
+이 절차는 독립 검증 후 반영된 Studio publication과 제한된 익명 미리보기용이다.
+API와 검증 범위는 [Platform 공개 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-publication.md)를
+따른다. 전체 Viewer·관람자 runtime과 실제 운영 배포를 완료한 기능은 아니다.
 
 ### 저장된 revision 검사와 공개
 
@@ -300,7 +300,8 @@ line·설명·치수를 표시한다. 전체 Viewer나 완전한 접근성 인�
 
 서버는 모든 익명 metadata·asset 요청에서 공개 상태, 현재 기관·작가·작품·asset 상태,
 정확한 governing approval, 공개 snapshot과 현재 작품·asset의 display 권리·만료·무결성을
-다시 검사한다. 실패하면 전시 전체 metadata와 모든 공개 asset 요청을 404로 거부한다.
+다시 검사한다. Bytes를 읽은 뒤 응답하기 직전에도 시간에 따른 권리 만료를 재확인한다.
+실패하면 전시 전체 metadata와 모든 공개 asset 요청을 404로 거부한다.
 응답은 `no-store`이며 304 캐시 응답으로 이 검사를 건너뛰지 않는다. 익명 요청은 계정
 credentials를 보내지 않고 공개 Studio service worker는 API나 작품 bytes를 캐시하지 않는다.
 
@@ -327,7 +328,7 @@ immutable 내용과 URL을 복원한다. 철회·만료된 권리나 바뀐 승�
 
 ### 공개 범위와 백업 제한
 
-현재 후보는 비상업 display용 제한된 GLB/PNG derivative만 공개하며 commercial·원본
+현재 공개 profile은 비상업 display용 제한된 GLB/PNG derivative만 공개하며 commercial·원본
 download·export 권리를 부여하지 않는다. 최대 64개 작품, 승인 derivative bytes 합계
 64 MiB이며 기존 공간·배치·조명 미리보기 한도도 적용한다. 공개 한도를 넘으면 전시를 작은
 새 draft들로 나눠 검사한다. Audio·OEX 패키징, 전체 Viewer·관람자 runtime·접근성 tour
