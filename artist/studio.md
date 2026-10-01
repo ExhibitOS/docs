@@ -3,7 +3,8 @@
 Studio 개발판의 `/studio`는 계정 없이 전시 문서의 로컬 초안을 만들고,
 방·벽·바닥·천장·문·창문과 표면 재질을 편집하며 제한된 3D 미리보기로 확인하는
 화면이다. 같은 문서를 JSON으로 편집·자동 저장하고 이력과 파일 백업으로 복원한다.
-승인된 CMS 작품의 실제 치수 배치·벽 정렬·조명·관람 설정도 구현·검증되었다. 전체 Viewer·Runtime와 publication은 후속 기능이다.
+승인된 CMS 작품의 실제 치수 배치·벽 정렬·조명·관람 설정도 구현·검증되었다. 명시적 publication은 독립 검증 중인 T03-04 후보이며 아래에 후보 절차를 기록한다.
+전체 Viewer·Runtime는 후속 기능이다.
 실행 명령과 검사 환경은 [Platform README](https://github.com/ExhibitOS/platform#readme),
 API와 저장 형식은 [Studio 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio.md),
 공간·재질 계약은 [공간 편집 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-geometry.md)를 따른다.
@@ -94,7 +95,8 @@ POST/PUT에서 같은 검사를 수행하고 다른 확장 namespace는 보존�
 따라 달라진다.
 
 공간 형상만 편집하는 절차는 작품 파일 bytes를 불러오거나 검증하지 않는다.
-작품 미리보기 조건은 아래에 따르며 전체 Viewer·전시 공개는 제공하지 않는다.
+작품 미리보기 조건은 아래에 따른다. 공간 편집만으로 전시를 공개하지 않으며
+공개는 별도 후보 절차를 사용한다. 전체 Viewer는 제공하지 않는다.
 곡선벽·계단·벽 두께·충돌 물리·imported mesh 방이나 물리적 조도 측정도 지원하지 않는다.
 
 ## 작품 배치·조명·관람 설정
@@ -199,8 +201,8 @@ session 명령 이력을 새로 시작하며 저장된 로컬 복원 이력은 �
 
 검증된 미리보기는 기존 공간 한도에 더해 작품 배치·조명을 각각 128개로 제한한다.
 문서와 숫자 편집·백업은 WebGL 실패에도 보존한다. 이 기능은 제한된 authoring
-미리보기이며 일반 모바일 GPU 지원, 전체 Viewer·Runtime·anonymous display·OEX 패키징·
-전시 공개는 후속 구현이다. 오프라인은 앱 shell과 저장된 metadata 편집만 제공하며
+미리보기이며 일반 모바일 GPU 지원, 전체 Viewer·Runtime·OEX 패키징은 후속 구현이다.
+Anonymous 공개는 아래 별도 후보 절차를 사용한다. 오프라인은 앱 shell과 저장된 metadata 편집만 제공하며
 protected 작품 bytes를 캐시하지 않는다. JSON 백업에도 작품 파일 bytes는 포함하지 않는다.
 
 ## 저장 실패와 이력 복원
@@ -249,3 +251,88 @@ Artist·curator는 자신의 초안을 관리하며 admin은 같은 기관의 �
 
 새 앱 버전은 명시적인 적용 또는 이전 탭이 닫힌 뒤 활성화된다. 적용 전에
 파일 백업을 보관한다. 앱 코드의 캐시 성공과 초안의 장기 보존은 별개다.
+
+## READY 검사·명시적 공개·철회 후보
+
+이 절차는 독립 검증 중인 T03-04 개발 후보용이다. 제품 acceptance와 merge가 끝나기
+전에는 완료된 공개 기능으로 보지 않는다. API와 최종 검증 범위는
+[Platform 공개 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-publication.md)에
+기록하며 이 링크의 main 반영은 제품 merge 후 이뤄진다.
+
+### 저장된 revision 검사와 공개
+
+온라인에서 현재 서버 계정을 명시적으로 확인하고 로컬 입력을 저장한 뒤 현재 계정에
+연결된 서버 draft를 저장·비교한다. ‘공개 preview·READY·Publication’의 ‘서버 revision
+READY 검사’를 누른다. 로컬 변경·온라인 재연결·CMS 승인만으로 자동 공개되지 않는다.
+미저장 입력이나 다른 계정에 연결된 draft로는 READY 공개를 진행할 수 없다.
+
+검사 결과는 `READY` 또는 `BLOCKED`, 검사한 강한 ETag와 각 문제의 code·path·message·
+수정 안내를 보여준다. 공간 참조·권리·접근성 metadata와 재질·presentation 확장을
+검사하며 각 작품은 현재 기관의 검토 승인된 CMS snapshot과 정확히 일치해야 한다.
+치수·권리·inventory를 draft JSON에서 바꾼 snapshot, 승인되지 않은 asset, 임의 URL,
+지원하지 않는 audio/media는 공개할 수 없다. 수정 안내에 따라 참조·권리·접근성 필드를
+고치거나 현재 CMS 승인본을 다시 가져와 배치를 교체하고, 서버에 다시 저장한 뒤 검사한다.
+Audio/media는 별도 비공개 사본에 보존하고 공개용 사본에서 제거한다.
+
+`READY`인 저장 revision에서 ‘READY revision 공개’를 누른다. 서버는 현재 권한,
+강한 If-Match ETag와 전체 readiness를 다시 검사한다. 이전의 READY 결과로 바뀐 revision을
+공개할 수 없다. ETag가 오래됐으면 412 충돌이므로 서버를 다시 비교하고, readiness가
+바뀌었으면 422이므로 문제를 고친 뒤 다시 저장·검사한다.
+
+정확히 같은 공개 요청의 응답이 유실됐을 때 재시도는 기록된 Publication의 현재 상태를
+돌려주며 철회한 Publication을 자동으로 다시 활성화하지 않는다. API는 UUID `requestId`로
+요청을 구분하고 변경된 요청 의도에는 새 ID가 필요하다. 화면을 다시 열었다면 먼저
+‘Publication 상태 다시 읽기’로 결과를 확인한다.
+
+### 익명 URL과 공개 snapshot
+
+공개 목록의 ‘익명 공개 preview 열기’는 `/p/{publicationId}`를 연다. 이 URL은 저장된
+불변 공개 OES projection을 읽으며 수정 가능한 private draft를 직접 읽지 않는다.
+공개 ID·참조는 새로 매핑하고 CMS 계정·기관 binding, private notes·storage key·원본 URL과
+알 수 없는 전시·작품 extension namespace는 제외한다. 알려진 재질·presentation metadata만
+확장으로 전달한다. 기본 OES 규격 버전은 바뀌지 않는다.
+
+공개 Artwork inventory는 실제 승인 derivative의 byte 크기·SHA-256을 기록한다.
+익명 미리보기는 지정된 anonymous asset endpoint를 요청하고 revision header·실제 byte
+크기·SHA-256을 확인한 뒤 제한된 GLB/PNG를 표시한다. 제출한 inventory 경로나 private
+CMS·authoring endpoint는 요청하지 않는다. 작품 목록형 대체 보기에는 제목·작가·credit
+line·설명·치수를 표시한다. 전체 Viewer나 완전한 접근성 인증을 뜻하지 않는다.
+
+서버는 모든 익명 metadata·asset 요청에서 공개 상태, 현재 기관·작가·작품·asset 상태,
+정확한 governing approval, 공개 snapshot과 현재 작품·asset의 display 권리·만료·무결성을
+다시 검사한다. 실패하면 전시 전체 metadata와 모든 공개 asset 요청을 404로 거부한다.
+응답은 `no-store`이며 304 캐시 응답으로 이 검사를 건너뛰지 않는다. 익명 요청은 계정
+credentials를 보내지 않고 공개 Studio service worker는 API나 작품 bytes를 캐시하지 않는다.
+
+CMS metadata를 바꾸거나 다시 승인하면 display가 계속 허용되더라도 기존 공개 URL은
+사용 불가가 된다. 새 승인본을 새 draft로 가져와 새 Publication을 만든다. Private draft
+변경이 공개 snapshot을 다시 쓰지는 않는다. 검사는 요청 시점에 수행하며 이미 받은
+metadata·bytes를 원격으로 지우지는 않는다.
+
+### 수정은 새 draft, 철회와 같은 URL 복원
+
+한 번 공개한 원본 서버 draft는 철회 후에도 frozen 상태다. ‘공개 revision에서 새 로컬
+draft’를 눌러 사본을 만들고 별도로 편집한 뒤 새 서버 전시로 저장·READY 검사·공개한다.
+기존 immutable snapshot을 덮어쓰는 수정 기능은 아니다.
+
+공개 목록에서 ‘Publication 철회’를 누르면 상태가 `unpublished`가 되고 이후 익명
+metadata·모든 bytes 요청을 거부한다. 공개 페이지의 ‘공개 상태 다시 확인’ 또는 다시
+열기로 이전 projection을 지운다. Snapshot·asset·이력은 삭제하지 않으며 공개·철회·복원과
+관련 권리 변경은 append-only audit 기록에 남는다.
+
+기존 불변 승인과 현재 권리가 계속 유효하면 ‘기존 Publication 다시 공개’가 같은
+immutable 내용과 URL을 복원한다. 철회·만료된 권리나 바뀐 승인은 이 버튼으로 우회할
+수 없다. 최신 private draft 내용으로 교체하지 않는다. 철회는 이후 접근 제어이며 이미
+브라우저에 받은 bytes의 복제나 원격 삭제를 통제하는 DRM은 아니다.
+
+### 공개 범위와 백업 제한
+
+현재 후보는 비상업 display용 제한된 GLB/PNG derivative만 공개하며 commercial·원본
+download·export 권리를 부여하지 않는다. 최대 64개 작품, 승인 derivative bytes 합계
+64 MiB이며 기존 공간·배치·조명 미리보기 한도도 적용한다. 공개 한도를 넘으면 전시를 작은
+새 draft들로 나눠 검사한다. Audio·OEX 패키징, 전체 Viewer·관람자 runtime·접근성 tour
+runtime, hosted production 배포와 실기기 GPU qualification은 후속 구현이다.
+
+JSON 백업이나 Git bundle에는 공개 DB 기록과 derivative blob bytes가 들어 있지 않는다.
+운영 복구는 공개 기록과 blob을 함께 복원하고 hash와 현재 권리를 확인해야 한다.
+로컬 synthetic 검사 archive는 실제 운영 복구 지점이 아니다.
