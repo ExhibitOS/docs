@@ -4,7 +4,7 @@ User and developer documentation. 작가, 큐레이터, 기관, 개발자와 sel
 
 ## 현재 상태
 
-2026-10-01 기준 공개 Platform의 인증된 단일 GLB/PNG import API가 구현·검증되었다. [작가용 import 안내](artist/import.md)는 서버 권한, quarantine, 실패·재시도와 원본 제한을 설명한다. CMS UI·Studio·Viewer와 전체 OES/OEX import는 아직 구현 중이며 완성된 서비스로 제공하지 않는다. 이 저장소는 문서 저장소로 별도의 제품 runtime이나 자동 테스트 suite가 없다.
+2026-10-01 기준 공개 Platform의 인증된 단일 GLB/PNG import API가 구현·검증되었다. [작가용 import 안내](artist/import.md)는 서버 권한, quarantine, 실패·재시도와 원본 제한을 설명한다. [Artist CMS](artist/cms.md)는 인증된 작가·작품 등록과 치수·권리·revision 검토, 제한된 GLB/PNG display 미리보기를 제공한다. Studio·전체 Viewer·OES/OEX import와 anonymous 전시 공개는 아직 구현 중이다. 이 저장소는 문서 저장소로 별도의 제품 runtime이나 자동 테스트 suite가 없다.
 
 ## 책임과 계약
 
