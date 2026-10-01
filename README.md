@@ -4,7 +4,7 @@ User and developer documentation. 작가, 큐레이터, 기관, 개발자와 sel
 
 ## 현재 상태
 
-2026-10-01 기준 공개 Platform의 인증된 단일 GLB/PNG import API가 구현·검증되었다. [작가용 import 안내](artist/import.md)는 서버 권한, quarantine, 실패·재시도와 원본 제한을 설명한다. [Artist CMS](artist/cms.md)는 인증된 작가·작품 등록과 치수·권리·revision 검토, 제한된 GLB/PNG display 미리보기를 제공한다. [Studio 로컬 초안과 공간 편집](artist/studio.md)은 계정 없는 방·평면 표면·사각 개구부·문 연결·재질 편집과 제한된 3D 미리보기, JSON 편집·오프라인 준비·이력·파일 복원과 선택적 ETag 서버 동기화의 개발 안내다. 작품 배치·조명·관람 설정은 독립 검증 중인 T03-03 후보이며 같은 Studio 안내에 후보 사용 절차와 제한을 기록한다. 전체 Viewer·Runtime·OES/OEX 패키지 import와 anonymous 전시 공개는 후속 구현이다. 이 저장소는 문서 저장소로 별도의 제품 runtime이나 자동 테스트 suite가 없다.
+2026-10-01 기준 공개 Platform의 인증된 단일 GLB/PNG import API가 구현·검증되었다. [작가용 import 안내](artist/import.md)는 서버 권한, quarantine, 실패·재시도와 원본 제한을 설명한다. [Artist CMS](artist/cms.md)는 인증된 작가·작품 등록과 치수·권리·revision 검토, 제한된 GLB/PNG display 미리보기를 제공한다. [Studio 로컬 초안과 공간 편집](artist/studio.md)은 계정 없는 방·평면 표면·사각 개구부·문 연결·재질 편집과 제한된 3D 미리보기, JSON 편집·오프라인 준비·이력·파일 복원과 선택적 ETag 서버 동기화의 개발 안내다. 승인된 CMS 작품의 실제 치수 배치·벽 정렬·조명·관람 설정도 구현·검증되었으며 같은 Studio 안내에 사용 절차와 제한을 기록한다. 전체 Viewer·Runtime·OES/OEX 패키지 import와 anonymous 전시 공개는 후속 구현이다. 이 저장소는 문서 저장소로 별도의 제품 runtime이나 자동 테스트 suite가 없다.
 
 ## 책임과 계약
 

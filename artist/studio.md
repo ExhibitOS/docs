@@ -3,8 +3,7 @@
 Studio 개발판의 `/studio`는 계정 없이 전시 문서의 로컬 초안을 만들고,
 방·벽·바닥·천장·문·창문과 표면 재질을 편집하며 제한된 3D 미리보기로 확인하는
 화면이다. 같은 문서를 JSON으로 편집·자동 저장하고 이력과 파일 백업으로 복원한다.
-작품 배치·조명·관람 설정은 독립 검증 중인 T03-03 후보이며 아래 절차는 이 후보에
-해당한다. 전체 Viewer·Runtime와 publication은 후속 기능이다.
+승인된 CMS 작품의 실제 치수 배치·벽 정렬·조명·관람 설정도 구현·검증되었다. 전체 Viewer·Runtime와 publication은 후속 기능이다.
 실행 명령과 검사 환경은 [Platform README](https://github.com/ExhibitOS/platform#readme),
 API와 저장 형식은 [Studio 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio.md),
 공간·재질 계약은 [공간 편집 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-geometry.md)를 따른다.
@@ -21,7 +20,7 @@ API와 저장 형식은 [Studio 안내](https://github.com/ExhibitOS/platform/bl
 작품 배치·transform, navigation·accessibility와 작품 snapshot을 문서에 보존한다.
 단위는 meter, 좌표계는 right-handed Y-up이며 현재 규격은 `1.0.0-draft.1`이다.
 잘못된 구조·참조·단위·quaternion 등은 거부하고 마지막 완료된 저장본을 유지한다.
-로컬 JSON 편집과 백업은 작품 파일 bytes를 포함하거나 검증하지 않는다. 아래 후보의
+로컬 JSON 편집과 백업은 작품 파일 bytes를 포함하거나 검증하지 않는다. 아래의
 온라인 작품 미리보기는 승인된 derivative만 별도로 요청한다. 편집 입력은 UTF-8
 1,000,000 bytes, 서버 전체 요청은 wrapper 포함 1 MiB 한도다. 공개 규격의
 문서 한도에 가까운 JSON도 입력·요청 한도 때문에 거부될 수 있다.
@@ -95,15 +94,14 @@ POST/PUT에서 같은 검사를 수행하고 다른 확장 namespace는 보존�
 따라 달라진다.
 
 공간 형상만 편집하는 절차는 작품 파일 bytes를 불러오거나 검증하지 않는다.
-후보의 작품 미리보기 조건은 아래에 따르며 전체 Viewer·전시 공개는 제공하지 않는다.
+작품 미리보기 조건은 아래에 따르며 전체 Viewer·전시 공개는 제공하지 않는다.
 곡선벽·계단·벽 두께·충돌 물리·imported mesh 방이나 물리적 조도 측정도 지원하지 않는다.
 
-## 작품 배치·조명·관람 설정 후보
+## 작품 배치·조명·관람 설정
 
-이 절차는 T03-03 개발 후보용이다. 독립 검증과 제품 merge가 완료되기 전에는
-완료된 공개 제품 기능으로 보지 않는다. API·저장 계약과 최종 제한은
-[Platform 작품 배치 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-placement.md)에
-기록하며 이 링크의 main 반영은 제품 merge 후 이뤄진다.
+이 절차는 독립 검증 후 반영된 Studio authoring 기능용이다. API·저장 계약과
+검증 범위는 [Platform 작품 배치 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-placement.md)를
+따른다. 아래 미리보기와 저장 기능은 전체 Viewer나 전시 공개를 의미하지 않는다.
 
 ### 승인된 CMS 작품 가져오기
 
@@ -144,7 +142,8 @@ notes·원본 storage key·원본 URL은 포함하지 않는다. Snapshot의 inv
 
 온라인 미리보기는 현재 권한과 승인 revision이 일치하는 watermarked CMS derivative를
 사용한다. Bytes 요청에서도 revision을 확인하므로 가져오기 이후 작품이 변경되면 오래된
-snapshot에 새 작품을 대신 표시하지 않는다. GLB bounds를 승인된 물리 치수에 맞추고
+snapshot에 새 작품을 대신 표시하지 않는다. 이 검사는 요청·다시 열기 시점에 수행하며
+이미 받은 bytes를 원격으로 지우지는 않는다. GLB bounds를 승인된 물리 치수에 맞추고
 PNG는 물리 크기의 평면에 표시한다. GLB의 외부 resource는 거부한다. 원본 download·export
 권리는 별도다. 오프라인이나 권한·revision 확인 실패 시 점선으로 표시한 실제 치수
 metadata bounds를 유지하고 bytes 사용 불가를 표시한다.
@@ -189,7 +188,8 @@ session 명령 이력을 새로 시작하며 저장된 로컬 복원 이력은 �
 선택적 `org.exhibitos.studio/presentation` version 1은 `version`, `viewpoints`,
 `credits`와 선택적 `startCamera`를 저장한다. Camera는 `roomId`, 방 기준 3개 숫자의
 `position`·`target`, `fov`로 구성한다. Viewpoint는 고유 UUID `id`와 비어 있지 않은
-최대 512자 `name`도 가진다. 최대 64개 viewpoint, credits 4096자, 직렬화된 확장
+최대 512 UTF-16 code units의 `name`도 가진다. 최대 64개 viewpoint, credits
+4096 UTF-16 code units, 직렬화된 확장
 32 KiB이고 camera 좌표는 유한하며 절댓값 10,000m 이내여야 한다.
 
 알 수 없는 자체 확장 버전·필드는 브라우저와 일반 서버 draft 쓰기에서도 거부한다.
@@ -197,8 +197,8 @@ session 명령 이력을 새로 시작하며 저장된 로컬 복원 이력은 �
 확장이 없는 기존 문서는 빈 credits·viewpoints와 시작 camera 없음으로 취급한다.
 다른 OES 클라이언트는 이 선택적 확장을 무시할 수 있다.
 
-후보 미리보기는 기존 공간 한도에 더해 작품 배치·조명을 각각 128개로 제한한다.
-문서와 숫자 편집·백업은 WebGL 실패에도 보존한다. 이 후보는 제한된 authoring
+검증된 미리보기는 기존 공간 한도에 더해 작품 배치·조명을 각각 128개로 제한한다.
+문서와 숫자 편집·백업은 WebGL 실패에도 보존한다. 이 기능은 제한된 authoring
 미리보기이며 일반 모바일 GPU 지원, 전체 Viewer·Runtime·anonymous display·OEX 패키징·
 전시 공개는 후속 구현이다. 오프라인은 앱 shell과 저장된 metadata 편집만 제공하며
 protected 작품 bytes를 캐시하지 않는다. JSON 백업에도 작품 파일 bytes는 포함하지 않는다.
