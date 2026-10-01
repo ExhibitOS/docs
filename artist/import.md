@@ -1,10 +1,10 @@
 # 작가용 작품 import 안내
 
-2026-10-01. ExhibitOS contributors. 문서 CC-BY-4.0, 실행 예제 Apache-2.0. 이 안내는 [Platform PR8](https://github.com/ExhibitOS/platform/pull/8)의 구현된 API를 설명한다. 현재 CMS UI는 구현 중이다. 전체 OES/OEX package 또는 Capture 원본을 import하는 기능은 아직 제공하지 않는다.
+2026-10-01. ExhibitOS contributors. 문서 CC-BY-4.0, 실행 예제 Apache-2.0. 이 안내는 [Platform PR8](https://github.com/ExhibitOS/platform/pull/8)의 구현된 API를 설명한다. 작가·작품 생성과 파일 검토 UI는 [Artist CMS 안내](cms.md)를 따른다. 전체 OES/OEX package 또는 Capture 원본을 import하는 기능은 아직 제공하지 않는다.
 
 ## 시작 조건
 
-관리자가 [Platform README](https://github.com/ExhibitOS/platform/blob/main/README.md)와 [인증 안내](https://github.com/ExhibitOS/platform/blob/main/docs/auth.md)에 따라 로컬 서버와 PostgreSQL/object storage를 구성해야 한다. 로그인은 tenant를 선택하며 작가의 작품 소유 관계는 로그인 사용자와 별도로 관리한다. 현재 API는 기존 artwork에 단일 primary asset을 추가하므로 새 작가·작품 등록 UI가 필요한 경우 후속 CMS 구현을 기다린다. 공개 signup·비밀번호 복구는 현재 지원하지 않는다.
+관리자가 [Platform README](https://github.com/ExhibitOS/platform/blob/main/README.md)와 [인증 안내](https://github.com/ExhibitOS/platform/blob/main/docs/auth.md)에 따라 로컬 서버와 PostgreSQL/object storage를 구성해야 한다. 로그인은 tenant를 선택하며 작가의 작품 소유 관계는 로그인 사용자와 별도로 관리한다. 이 import API는 기존 artwork에 단일 primary asset을 추가한다. 새 작가·작품은 CMS에서 먼저 등록한다. 공개 signup·비밀번호 복구는 현재 지원하지 않는다.
 
 작품 소유 작가 또는 해당 tenant admin만 import를 생성하고 읽고 취소·재시도할 수 있다. 큐레이터와 관람자 역할은 이 권한을 얻지 않는다. 다른 tenant의 admin 권한은 사용할 수 없다. 로그인 세션과 모든 변경의 Origin/Host/CSRF 검사는 서버에서 수행한다.
 
@@ -12,7 +12,7 @@
 
 단일 GLB2 또는 PNG를 최대32MiB까지 받는다. GLB는 외부 URI·image·texture·extension 없이 self-contained여야 한다. PNG는 non-interlaced8-bitRGB/RGBA, 최대4,194,304pixels, 각 변8192이하이며 ancillary metadata를 받지 않는다. JPEG/WebP, remote URL과 archive는 지원하지 않는다. 폭넓은 일반 glTF 지원을 뜻하지 않으므로 오류 시 원본을 보존하고 호환되는 사본을 준비한다.
 
-등록 값 `scaleMeters`는 양수(최대1,000,000)여야 한다. 이는 전체 작품의 width/height/depth나 provenance 편집을 대체하지 않는다. 별도의 CMS에서 치수와 단위 변환을 확인하는 기능이 후속 구현 대상이다.
+등록 값 `scaleMeters`는 양수(최대1,000,000)여야 한다. 이는 전체 작품의 width/height/depth나 provenance 편집을 대체하지 않는다. CMS에서 치수와 단위 변환 기록을 별도로 검토한다.
 
 ## 등록 순서
 
@@ -30,7 +30,7 @@
 
 작품 권리는 코드 라이선스와 독립이다. 소유자, license, credit, validity와 nested display/download/export 등 full OES rights를 제공해야 한다. 임의의 flat boolean grant나 잘못된 기간은 거부한다. 별도 원본 download는 현재 유효한 download 권한과 작품 접근 권한을 요구한다. export-check는 export 자격 검사이며 OEX 파일을 만드는 기능이 아니다.
 
-`approved`는 제한된 파일 검사를 통과했다는 뜻이다. 공개 전시를 허가하거나 anonymous URL을 발급하지 않는다. display와 download/export 권한은 독립이다. 원본 URL 제한과 향후 watermarked derivative는 브라우저에서 이미 받은 데이터를 복제할 수 없도록 보장하는 DRM이 아니다. Watermarked derivative와 실제 전시 공개 흐름은 아직 후속 작업이다.
+`approved`는 제한된 파일 검사를 통과했다는 뜻이다. 공개 전시를 허가하거나 anonymous URL을 발급하지 않는다. display와 download/export 권한은 독립이다. 원본 URL 제한과 향후 watermarked derivative는 브라우저에서 이미 받은 데이터를 복제할 수 없도록 보장하는 DRM이 아니다. CMS는 watermarked display derivative를 제공한다. 실제 전시 공개 흐름은 후속 작업이다.
 
 ## 보존과 복구
 
