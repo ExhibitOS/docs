@@ -5,7 +5,7 @@ Studio 개발판의 `/studio`는 계정 없이 전시 문서의 로컬 초안을
 화면이다. 같은 문서를 JSON으로 편집·자동 저장하고 이력과 파일 백업으로 복원한다.
 승인된 CMS 작품의 실제 치수 배치·벽 정렬·조명·관람 설정과 저장된 서버 revision의
 명시적 publication·철회·제한된 익명 미리보기도 구현·검증되었다.
-전체 Viewer·Runtime는 후속 기능이다.
+이 문서는 초기 publication profile의 절차다. 이후 Viewer·오디오·패키징 개발 기능과 남은 검증 조건은 [현재 지원 범위](../status.md)를 확인한다.
 실행 명령과 검사 환경은 [Platform README](https://github.com/ExhibitOS/platform#readme),
 API와 저장 형식은 [Studio 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio.md),
 공간·재질 계약은 [공간 편집 안내](https://github.com/ExhibitOS/platform/blob/main/docs/studio-geometry.md)를 따른다.
@@ -328,11 +328,12 @@ immutable 내용과 URL을 복원한다. 철회·만료된 권리나 바뀐 승�
 
 ### 공개 범위와 백업 제한
 
-현재 공개 profile은 비상업 display용 제한된 GLB/PNG derivative만 공개하며 commercial·원본
+이 초기 안내의 공개 profile은 비상업 display용 제한된 GLB/PNG derivative만 공개하며 commercial·원본
 download·export 권리를 부여하지 않는다. 최대 64개 작품, 승인 derivative bytes 합계
 64 MiB이며 기존 공간·배치·조명 미리보기 한도도 적용한다. 공개 한도를 넘으면 전시를 작은
-새 draft들로 나눠 검사한다. Audio·OEX 패키징, 전체 Viewer·관람자 runtime·접근성 tour
-runtime, hosted production 배포와 실기기 GPU qualification은 후속 구현이다.
+새 draft들로 나눠 검사한다. 이 한도와 audio 제한은 이 문서의 초기 publication profile 기준이다. 이후 개발판의
+오디오·OEX·Viewer 지원은 [현재 지원 범위](../status.md)의 고정된 소스를 확인한다.
+Hosted production 배포와 실기기 GPU qualification은 완료되지 않았다.
 
 JSON 백업이나 Git bundle에는 공개 DB 기록과 derivative blob bytes가 들어 있지 않는다.
 운영 복구는 공개 기록과 blob을 함께 복원하고 hash와 현재 권리를 확인해야 한다.
