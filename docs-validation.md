@@ -1,6 +1,6 @@
 # Reference 설치·export·복원 검증 기록
 
-이 절차는 공개 제품의 실제 명령/화면을 따라 새 사용자 문서 검사를 할 수 있도록 구성했습니다. 작성 시점(2026-10-11)에 이 문서만 읽은 새 사용자의 전체 install→export→restore 실행은 **미실행**입니다. 이전 제품의 API/브라우저·합성 DB 복원 결과를 그 사용자의 통과 결과로 대체하지 않습니다. 문서 저장소에는 제품 build/test suite가 없습니다.
+이 절차는 공개 제품의 실제 명령/화면을 따라 새 사용자 문서 검사를 할 수 있도록 구성했습니다. 2026-10-11에 공개 문서 절차를 따라 새 합성 환경에서 install→실제 CMS/Studio 화면→OEX→별도 DB/blob 복원을 실행했습니다. 실제 브라우저 조작을 자동화했으며 기존 제품 test driver·mock API·기존 node_modules 사본으로 대체하지 않았습니다. 실패한 문서/host 경로와 검사 driver 오류는 아래에서 성공 단계와 구분합니다. 실사용자·실제 작품·기기/원격 hosted 검증 결과는 아닙니다. 문서 저장소에는 제품 build/test suite가 없습니다.
 
 ## 검사 준비와 설치
 
@@ -51,10 +51,24 @@ Manager를 사용하는 운영자는 [그 제품 복원 절차](https://github.c
 
 | 확인 | source/실제 결과를 기입 |
 | --- | --- |
-| 신규 사용자 문서-only 설치/로그인 | 미실행 |
-| 합성 작품 승인·전시 공개/OEX export→새 draft import | 미실행 |
-| 일관된 service backup→별도 새 DB/blob 복원 | 미실행 |
-| 실제 접근성/키보드·기여/번역 양식 사용 | 미실행 |
-| 문서 상대 링크·고정 소스 참조·diff 검토 | 2026-10-11: 상대 링크79/고정 Platform Git object 경로26 존재 확인, 오류0; `git diff --check` exit0. HTTP live 상태·실제 예제 실행은 미검사 |
+| 신규 reference 문서 절차 설치/로그인 | PASS: 새 공개 Platform `ce0f4ab6ac9495753669f828690b12b0908fff4b` snapshot의 실제 npm ci/build, storage:init, 14 migration, private bootstrap, 실제 CMS 로그인 |
+| 합성 작품 승인·전시 공개/OEX export→새 draft import | PASS: 실제 작가/작품 form·PNG upload·import:work·현재 revision 승인·Studio 서버 저장/READY/공개·비로그인 관람. OEX 다운로드4,383B와 기존 job refresh/import로 별도 draft/artwork ID, PNG bytes·치수·권리·credit·방·배치 보존 |
+| 일관된 service backup→별도 새 DB/blob 복원 | PASS: writer 정지→암호화 create→독립 recovery-key 사본 verify→같은 소유 PG cluster의 별도 새 빈 DB와 새 blob root restore. 14 migrations/71 tables/5 objects 검증 및 restored.json complete. 새 로그인·공개 화면·원본/공개 derivative 각각의 hash 확인, 복원 후보의 명시적 display 철회 후 익명 publication/media 각각404 |
+| 실제 접근성/키보드·기여/번역 양식 사용 | 실제 익명 화면 Tab focus smoke PASS. 전체 접근성/보조기기 audit와 외부 기여자·번역가의 실제 제출은 미실행; 양식/원문·license 추적 안내와 링크 검토를 별도로 기록 |
+| 문서 상대 링크·고정 소스 참조·diff 검토 | 2026-10-11 최종 수정: 상대 링크81개·고정 Platform source 참조40회(고유31개)의 Git object 경로 확인, 오류0; `git diff --check` exit0. HTTP live 링크 상태는 미검사; 실제 reference 실행은 위 단계별 결과 참조 |
 
 통과는 실제 실행 결과·명령/화면·exact source와 증거가 있을 때만 갱신합니다. 개인정보가 없는 compact 결과는 공유할 수 있으나 원본·credentials·복호화 후보/DB/backup은 private 보관합니다. 이 양식은 새 product gate/지원 환경을 만들지 않고 원래 documentation acceptance의 실행 결과를 구분합니다.
+
+
+## 2026-10-11 reference 실제 실행의 범위
+
+최종 기록 시각은 **2026-10-11 18:12 Europe/Berlin (CEST)**입니다. Platform source는 위 `ce0f4ab`이며 docs baseline은 `50a7bfd47adeabfca18dc948b92805172b456327`와 이 작업의 self-host 환경/worker/host-network 안내 수정입니다. 환경은 macOS27.0.1 arm64, Node24.21.0/npm11.19.0, 공식 PostgreSQL18.6 index `74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336`, 기존 Playwright1.63.0 Chromium 캐시(bundle153.0.8010.12)입니다. 새 private 경로와 고유 Compose project만 사용했고 기존 사용자 container/network/volume을 지우지 않았습니다.
+
+- 설치 첫 offline cache 시도는 missing tarball로 실패했습니다. 문서의 정상 `npm ci`를 새 snapshot에서 실제 실행하여 통과했으며 dependency 사본을 붙이지 않았습니다. 첫 build는 저장공간 감시의 global growth 한도에 걸려 정지했습니다. 실패 로그를 유지하고 한도를 다시 확인한 뒤 **실패한 build만** 실행해 exit0(6.36초)를 확인했습니다.
+- 기존 공개 source의 PostgreSQL digest는 registry manifest가 아닌 잘못된 pin이었습니다. 공개 Platform PR54의 공식 digest 수정이 병합된 뒤 새 `ce0f4ab` snapshot을 설치했습니다. 로컬 config-ID나 다른 image를 숨겨 대체하지 않았습니다.
+- 기본 Compose network 생성은 실제 host의 Docker address-pool 소진으로 실패했습니다. [self-host](guides/self-host.md)의 명시적 operator-checked IPAM overlay 경로로 같은 검사 project를 재개했습니다. 기본 네트워크 경로를 통과한 것으로 기록하지 않습니다. filesystem blob 경로이므로 PostgreSQL만 시작했습니다.
+- 임시 브라우저 검사 driver의 잘못된 health URL, 비동기 목록/refresh 대기 누락, 중복 제목의 다른 artwork 선택, master와 공개 derivative 해시 혼동으로 생긴 실패를 보존했습니다. 완료한 설치·저작·백업을 반복하거나 실패를 제품 통과로 바꾸지 않고 해당 실패 단계만 고쳤습니다. 제품 API/화면 응답은 실제 실행 결과이며 mock이 아닙니다.
+
+원본 합성 PNG는 **163B**, SHA-256 `e0dd220fecc7ccf7c66d72e840a948b97aba0e523fbbf97b110a588f544d0495`입니다. OEX와 복원 CMS의 실제 원본 다운로드가 이 bytes를 보존했습니다. 공개 승인 PNG derivative는 **220B**, SHA-256 `9b20e3ffe9046ca46c8eb65c9aeee344a2c87b51e5da8a91bf3e3cd6e28fd8d2`이며 자신의 snapshot hash와 비교했습니다. 두 artifact를 같은 원본이라고 부르지 않습니다. OEX SHA-256은 `6e6f324b2e4a8b5fae9e775aaafdfe95647693ca520c1a0e55b94d726d4533ca`입니다. 합성 메타데이터의 1×1m는 워크플로용 명시적 선언이며 실제 작품을 실측한 결과가 아닙니다.
+
+독립 암호화 복원 manifest SHA-256은 `a84f3e9914cc1f058d0766fd5517a7b3a0ffc15a6d8094583cc9c60f81c09f15`입니다. private 단계별 source/명령/실패·성공/log hash를 묶은 compact aggregate receipt SHA-256은 `a8c9765a3c1645c57bb9d9a202d02081a373d25a0a182b56777bf7fb223fed25`입니다. credentials·key·복호화 DB·작품 파일은 문서 저장소에 포함하지 않습니다. 원본 서비스와 백업은 검사 중 보존했고 복원 후보에서만 display consent를 철회했습니다. 실제 권리 철회 검사는 이미 전달된 파일의 원격 삭제나 independent backup의 삭제를 보장하지 않습니다.

@@ -18,17 +18,64 @@ ExhibitOS 핵심 self-host는 유료 공식 호스팅 구매가 필수 조건이
 ```sh
 npm ci
 npm run storage:init
-docker compose --env-file .local/storage.env -f compose.storage.yml up -d
+docker compose --env-file .local/storage.env -f compose.storage.yml up -d postgres
 npm run build
 ```
 
-`storage:init`는 새 private `.local/storage.env`를 만들며 기존 값을 덮어쓰지 않습니다. 운영자는 [storage 연결/마이그레이션](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/docs/storage.md)에 따라 `DATABASE_URL`을 private 환경으로 공급하고 `npm run storage:migrate`를 실행합니다. filesystem `BLOB_ROOT`를 private 실제 경로로 준비합니다. [인증 설정](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/docs/auth.md)의 `AUTH_MODE`, 정확한 `AUTH_ORIGIN`, loopback `HOST`/`PORT`와 서버 origin을 함께 구성하고 새 private bootstrap JSON에 실제 tenant UUID/subject/password를 넣습니다. 자격정보를 인수·공유 콘솔·Git에 넣지 않습니다.
+`storage:init`는 새 private `.local/storage.env`에 무작위 PostgreSQL password를 만들며 기존 파일을 덮어쓰지 않습니다. 이 파일만 생성해서는 API의 `DATABASE_URL`이 설정되지 않습니다. 아래는 위 Compose의 새 로컬 DB와 filesystem blob을 사용하는 reference 설정입니다. 자신의 관리자 권한으로 생성한 환경 파일만 읽습니다. shell tracing(`set -x`)을 켜지 말고 환경/비밀값을 콘솔·공유 로그에 출력하지 않습니다.
 
 ```sh
+set -a
+source .local/storage.env
+set +a
+export DATABASE_URL="postgresql://postgres:${POSTGRES_PASSWORD}@127.0.0.1:5432/exhibitos"
+export AUTH_MODE=local
+export AUTH_ORIGIN=http://127.0.0.1:5173
+export HOST=127.0.0.1
+export PORT=3000
+mkdir -m 700 .local/blobs
+export BLOB_ROOT="$PWD/.local/blobs"
+npm run storage:migrate
+```
+
+filesystem blob reference는 PostgreSQL만 시작하므로 쓰지 않는 S3 서비스/volume을 만들지 않습니다. S3 backend를 선택했다면 linked storage guide의 별도 설정을 따릅니다.
+
+Docker가 `all predefined address pools have been fully subnetted`로 새 네트워크를 만들지 못하면 기존 전시/정지 container의 네트워크를 prune하지 않습니다. 운영자가 `docker network inspect`의 모든 subnet과 host/VPN route를 확인한 뒤 **겹치지 않는** 작은 private subnet을 선택할 수 있습니다. 다음 `10.241.0.0/28`은 예시이며 다른 컴퓨터에서 그대로 안전하다고 가정하지 않습니다. 확인한 값만 ignored private overlay에 기록합니다. image/권한/DB 설정은 원래 Compose 그대로 유지합니다.
+
+```sh
+cat > .local/reference-network.yml <<'YAML'
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 10.241.0.0/28
+YAML
+chmod 600 .local/reference-network.yml
+docker compose --env-file .local/storage.env \
+  -f compose.storage.yml -f .local/reference-network.yml up -d postgres
+```
+
+이 host-specific 해결 경로를 실제로 썼으면 원래 기본 네트워크 생성 실패와 overlay 사용을 결과에 함께 기록합니다. 동일 검사 project에 사용했던 overlay를 정지/정리 명령에도 유지하며 기존 환경의 리소스에는 적용하지 않습니다.
+
+`AUTH_ORIGIN`은 브라우저가 여는 정확한 웹 origin입니다. 기본 Vite 웹은 `/api`를 loopback API3000으로 전달합니다. 기존 경로/포트가 사용 중이면 기존 서비스를 멈추거나 폴더를 비워 재사용하지 말고 운영자에게 별도 설정을 요청합니다. 설정된 환경은 API를 실행할 같은 터미널에서 유지합니다. [storage](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/docs/storage.md)와 [auth](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/docs/auth.md)의 실제 DB/권한/새 대상 조건도 따릅니다.
+
+첫 bootstrap JSON은 정확히 `tenantId`, `subject`, `password`만 포함합니다. 아래는 새 reference 계정의 UUID와 무작위 password를 private 파일로 만드는 예이며 기본/공유 password가 아닙니다.
+
+```sh
+node --input-type=module <<'JS'
+import { randomUUID, randomBytes } from 'node:crypto';
+import { writeFileSync } from 'node:fs';
+writeFileSync('.local/bootstrap-admin.json', JSON.stringify({
+  tenantId: randomUUID(), subject: 'reference-operator',
+  password: randomBytes(32).toString('base64url')
+}), { flag: 'wx', mode: 0o600 });
+JS
 npm run auth:bootstrap < .local/bootstrap-admin.json
 ```
 
-그 뒤 설정된 API와 웹을 별도 터미널에서 `npm run dev:api`, `npm run dev:web`로 시작하고 `/cms` 로그인→[작가 등록](artist.md)→[Studio 공개/OEX](curator.md)를 실행합니다. 개발 웹 주소와 API origin은 [README](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/README.md)의 현재 proxy 설정에 맞춥니다. 이 개발 명령은 공개 네트워크 배포 명령이 아닙니다. 네트워크 서비스에는 외부 TLS terminator·secure cookie·정확한 origin과 별도 운영 검토가 필요합니다. 기본 password·공개 signup·credential recovery를 가정하지 않습니다.
+파일에서 자신의 tenant UUID/subject/password를 개인 컴퓨터에서만 확인해 CMS 로그인에 사용합니다. 내용을 Issue·공유 화면·로그에 넣지 않습니다. bootstrap은 기존 계정이 있는 DB에서 다시 실행하지 않습니다. 같은 private 환경을 유지한 터미널에서 `npm run dev:api`, 별도 터미널에서 `npm run dev:web`를 실행하고 `http://127.0.0.1:5173/cms`를 엽니다. 실제 준비된 계정으로 로그인→[작가 등록](artist.md)→[Studio 공개/OEX](curator.md)를 실행합니다. 작품 파일이 queued로 남으면 API가 파일 import worker를 자동 실행한다고 가정하지 않습니다. 같은 private `DATABASE_URL`/`BLOB_ROOT`를 유지한 별도 터미널에서 `npm run import:work`를 실행한 뒤 CMS의 검사 상태/파일 목록을 다시 읽습니다. 이것은 한 번 실행하는 기존 import worker이며 production scheduler를 설치하지 않습니다. OEX job worker는 configured API의 별도 경로입니다.
+
+이 명령은 공개 네트워크 배포가 아닙니다. 네트워크 서비스에는 외부 TLS terminator·secure cookie·정확한 origin과 별도 운영 검토가 필요합니다. 공개 signup·credential recovery를 가정하지 않습니다. reference 신규 사용자 실제 실행 결과는 [검증 기록](../docs-validation.md)에서 별도로 확인합니다.
 
 ## Manager와 복구
 
