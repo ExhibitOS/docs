@@ -15,7 +15,7 @@ User and developer documentation. 작가, 큐레이터, 기관, 개발자와 sel
 | 역할별 가이드 | [작가](guides/artist.md) · [큐레이터](guides/curator.md) · [기관](guides/institution.md) |
 | 동의·읽기·운영 | [개인정보](guides/privacy.md) · [접근성](guides/accessibility.md) · [self-host/hosted](guides/self-host.md) |
 | 개발·커뮤니티 | [개발](developer/development.md) · [기여](developer/contributing.md) · [번역](developer/translation.md) · [template 권리](developer/template-rights.md) |
-| 문서만으로 실행할 reference 검사 | [설치·export·복원 절차/미실행 기록](docs-validation.md) |
+| 문서만으로 실행할 reference 검사 | [설치·export·복원 절차/실행 결과](docs-validation.md) |
 | 개발판 기능과 검증 제한 | [지원 범위·공개 소스 색인](status.md) |
 
 이 저장소는 사용법 문서이며 제품 runtime이나 자동 테스트 suite를 포함하지 않습니다. 개발판에 구현된 기능, 기본 브랜치에 반영된 기능과 실제 출시·기기 검증은 구분합니다. 실행 환경과 검사 명령은 사용하는 제품 revision의 README를 따릅니다.
