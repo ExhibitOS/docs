@@ -72,3 +72,10 @@ Manager를 사용하는 운영자는 [그 제품 복원 절차](https://github.c
 원본 합성 PNG는 **163B**, SHA-256 `e0dd220fecc7ccf7c66d72e840a948b97aba0e523fbbf97b110a588f544d0495`입니다. OEX와 복원 CMS의 실제 원본 다운로드가 이 bytes를 보존했습니다. 공개 승인 PNG derivative는 **220B**, SHA-256 `9b20e3ffe9046ca46c8eb65c9aeee344a2c87b51e5da8a91bf3e3cd6e28fd8d2`이며 자신의 snapshot hash와 비교했습니다. 두 artifact를 같은 원본이라고 부르지 않습니다. OEX SHA-256은 `6e6f324b2e4a8b5fae9e775aaafdfe95647693ca520c1a0e55b94d726d4533ca`입니다. 합성 메타데이터의 1×1m는 워크플로용 명시적 선언이며 실제 작품을 실측한 결과가 아닙니다.
 
 독립 암호화 복원 manifest SHA-256은 `a84f3e9914cc1f058d0766fd5517a7b3a0ffc15a6d8094583cc9c60f81c09f15`입니다. private 단계별 source/명령/실패·성공/log hash를 묶은 compact aggregate receipt SHA-256은 `a8c9765a3c1645c57bb9d9a202d02081a373d25a0a182b56777bf7fb223fed25`입니다. credentials·key·복호화 DB·작품 파일은 문서 저장소에 포함하지 않습니다. 원본 서비스와 백업은 검사 중 보존했고 복원 후보에서만 display consent를 철회했습니다. 실제 권리 철회 검사는 이미 전달된 파일의 원격 삭제나 independent backup의 삭제를 보장하지 않습니다.
+
+
+## 2026-10-18 시작·사용 안내 갱신의 제한된 검사
+
+처음 시작하기, 선택적 촬영·Mac 처리, 작품 가져오기·배치, 관람, 로컬 운영과 공개 방향을 기존 문서 안에서 정리했습니다. 일반 사용자 흐름과 개발·과거 운영 참고를 구분합니다. 공개 저장소의 실제 visibility와 새 연결 문서 경로를 읽기 조회했고, 변경 Markdown9개에서 상대 파일 링크61개의 존재와 whitespace를 확인했습니다. 이는 제품 설치·원격 배포·복원·공식 스토어 또는 실기기 지원의 재검증이 아닙니다.
+
+별도 정적 웹사이트의 로컬 Chromium 검사에서는 기존21개 페이지/폭 조합과 이후 카드 밑줄만 다듬은 영향6개 화면을 확인했습니다. 이 결과를 위 과거 reference 설치·export·복원 증거에 합치거나 새 제품 검증으로 확대하지 않습니다. Safari·실제 iOS·VoiceOver와 초보자 직접 관찰은 이번에 수행하지 않았습니다. 정식 다운로드·App Store·정적 체험 URL은 실제 제공 전 준비 중으로 유지합니다.
