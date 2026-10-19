@@ -1,6 +1,8 @@
 # 개인정보, 동의와 보관
 
-CMS의 **개인정보와 동의**에서 본인의 현재 tenant를 확인합니다. 기관 token이 이 계정 화면의 권한을 대신하지 않습니다. [현재 서버 정책](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/docs/privacy.md)과 [글 제안](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/docs/assistance.md)은 구현 범위를 설명합니다.
+검토 중인 개발판의 [작품 관리 화면](../artist/cms.md)에서 **개인정보·계정 설정**을 열어 현재 계정과 기관 정보를 확인합니다. 이전 화면에서는 **개인정보와 보존 설정**이 바로 펼쳐져 있을 수 있습니다. 기관 token이 이 계정 화면의 권한을 대신하지 않습니다.
+
+설정을 열거나 접는 동작은 저장·동의 변경·삭제 요청을 실행하지 않습니다. 해당 작업의 버튼을 누르고 결과를 확인해야 합니다. [현재 서버 정책](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/docs/privacy.md)과 [글 제안](https://github.com/ExhibitOS/platform/blob/6663912e4cdaf205cbc648551f4a0bb55b6f0293/docs/assistance.md)은 구현 범위를 설명합니다.
 
 ## 분석 동의
 
@@ -10,7 +12,7 @@ CMS의 **개인정보와 동의**에서 본인의 현재 tenant를 확인합니�
 
 ## 본인 정보 내보내기와 계정 처리
 
-1. 삭제 전에 **본인 정보 내보내기**를 실행하고 private 위치에 보관합니다. 현재 tenant의 본인 subject·작가/작품 metadata·권리/hash inventory·등록 객체·동의입니다. 계정 전체 media archive, 다른 tenant 자료나 credential/session 사본이 아닙니다.
+1. 삭제 전에 **내 정보 내보내기**에서 **내 정보 JSON 준비**를 누릅니다. 준비되면 **준비된 내 정보 내려받기**로 파일을 받아 개인 보관 위치에 저장합니다. 현재 tenant의 본인 subject·작가/작품 metadata·권리/hash inventory·등록 객체·동의입니다. 계정 전체 media archive, 다른 tenant 자료나 credential/session 사본이 아닙니다.
 2. 삭제 요청은 전역 로그인에 영향을 줍니다. 독립 backup은 남으며 처리 이후 로그인할 수 없어 본인 상태 조회가 불가능할 수 있습니다. 필요한 receipt 확인은 운영자에게 요청해야 할 수 있습니다.
 3. 독립 backup 보관 안내에 동의한 뒤 요청합니다. 요청 접수는 실제 삭제 완료가 아닙니다. 현재 hold·마지막 admin·등록된 보관 자료 조건으로 blocked될 수 있으며 운영자 worker가 별도로 처리합니다.
 4. `ACCOUNT_IDENTITY_ERASED_DATA_RETAINED`는 로그인 identity·credentials가 제거됐지만 불변 작품/권리/승인/검토 이력과 등록 자료·독립 backup이 남는 결과입니다. 모든 개인 데이터가 사라졌다는 뜻이 아닙니다. 콘텐츠는 각각의 권리·보관 정책을 따릅니다.
