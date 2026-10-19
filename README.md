@@ -1,10 +1,12 @@
 # ExhibitOS docs
 
+> 최신 1차 범위: [iPhone 촬영 → Mac 최종 처리](artist/mac-processing-first-release.md). 과거 지원 후보나 iPhone 최종 처리 안내보다 이 사용자 결정이 우선합니다. 실제 통과 범위는 각 검사 기록을 확인하세요.
+
 User and developer documentation. 작가, 큐레이터, 기관, 개발자와 self-host 운영자의 공개 가능한 사용법 및 기여 안내를 담당한다.
 
 ## 여기서 시작하세요
 
-[역할별 시작 안내](start-here.md)에서 목적에 맞는 절차를 찾으세요.
+[처음 시작하기](start-here.md)에서 목적에 맞는 준비·실행·확인·문제 해결을 찾으세요. Manager의 브라우저 Studio 연결과 호환 파일 경로를 설명하며 정식 다운로드·스토어·설치 검증이 완료된 것으로 안내하지 않습니다.
 
 | 목적 | 안내 |
 | --- | --- |
@@ -28,7 +30,7 @@ spec/platform/manager/deployment의 공개 계약과 검증된 사용법을 설�
 
 ## 구현 순서
 
-제품 task별 사용법을 보완하고 T11-04에서 공통 문서·community template을 검증한다.
+제품별 실제 사용법과 공통 문서·기여 양식을 기존 지원 범위에서 유지한다.
 
 제품 저장소의 README가 toolchain과 실제 검사 명령의 기준이다. 각 task의 검증된 기능과 오류 경로를 공개 사용법에 반영한다. 링크·예제 명령, 새 환경 quickstart, 접근성 보기, 기여 안내와 비공개 자료 노출 여부를 검사한다.
 
