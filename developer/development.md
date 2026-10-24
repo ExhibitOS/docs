@@ -14,4 +14,4 @@ API 입력의 role/tenant를 신뢰하지 말고 서버 session·현재 membersh
 
 유료 Apple 개발자 계정·공식 배포 인증서가 없어도 자기 Mac에서 Manager 소스를 빌드·실행하는 개발 경로를 유지합니다. 실제 명령·도구는 [Manager README](https://github.com/ExhibitOS/manager#readme)와 [desktop 안내](https://github.com/ExhibitOS/manager/blob/main/docs/desktop.md)를 따릅니다. 개발 서명·ad-hoc 실행은 Developer ID 서명·Apple 공증·공증 티켓 검증을 완료한 공식 배포판과 다릅니다. Gatekeeper 비활성화·격리 속성 제거를 일반 설치 방법으로 안내하지 않습니다.
 
-공식 Mac Processing의 배포·업데이트 방향은 Mac App Store입니다. 현재 공식 제품 페이지·스토어 설치 검증은 미완료입니다. Apple 계정·비밀번호를 Manager에 입력하지 않습니다. Capture·Processing의 비공개 소스 접근 권한을 공개 Platform 빌드 조건으로 요구하지 않습니다. 공개 파일 계약에 맞는 작품을 동일 기준으로 검증하고, 공식 앱 서명·스토어 영수증을 요구하지 않습니다.
+공식 ExhibitOS Processing의 배포·업데이트 방향은 Mac App Store입니다. 현재 공식 제품 페이지·스토어 설치 검증은 미완료입니다. Apple 계정·비밀번호를 Manager에 입력하지 않습니다. Capture·Processing의 비공개 소스 접근 권한을 공개 Platform 빌드 조건으로 요구하지 않습니다. 공개 파일 계약에 맞는 작품을 동일 기준으로 검증하고, 공식 앱 서명·스토어 영수증을 요구하지 않습니다.

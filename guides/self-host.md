@@ -4,7 +4,7 @@
 
 로컬 Studio 사용에는 Cloudflare·Render 계정이나 토큰이 필요하지 않습니다. Manager의 **Studio 준비하고 열기**는 선택한 설치의 환경·실행 패키지·서버 준비를 확인한 뒤 기본 브라우저에서 Studio를 여는 경로입니다. 포함 runtime이 없거나 실제 OS 승인이 필요하면 안내하고 멈춥니다. 새 컴퓨터·공식 배포판 전체 설치가 이미 검증됐다는 뜻은 아닙니다.
 
-Manager는 Developer ID 서명·Apple 공증 후 웹사이트 배포, 공식 Mac Processing은 Mac App Store 배포 방향입니다. 정식 다운로드·스토어 경로는 아직 준비 중입니다. Manager의 일반 로컬 소스 빌드는 유료 Apple 개발자 계정이나 정식 배포 인증서를 필수로 요구하지 않습니다. [현재 Manager 사용법](https://github.com/ExhibitOS/manager/blob/main/docs/desktop.md)을 확인하세요.
+Manager는 Developer ID 서명·Apple 공증 후 웹사이트 배포, 공식 ExhibitOS Processing은 Mac App Store 배포 방향입니다. 정식 다운로드·스토어 경로는 아직 준비 중입니다. Manager의 일반 로컬 소스 빌드는 유료 Apple 개발자 계정이나 정식 배포 인증서를 필수로 요구하지 않습니다. [현재 Manager 사용법](https://github.com/ExhibitOS/manager/blob/main/docs/desktop.md)을 확인하세요.
 
 ### 인터넷 공개가 필요할 때
 
