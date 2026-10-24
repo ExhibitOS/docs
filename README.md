@@ -1,8 +1,15 @@
 # ExhibitOS docs
 
+저장소별 책임·빌드 경계는 [아키텍처 정본](https://github.com/ExhibitOS/platform/blob/main/docs/architecture.md#repository-roles-build-boundaries)을 참조합니다. 이 저장소는 사용자·개발자 안내이며 아래 소스 개발 절차를 설치 사용자의 필수 준비물로 확대하지 않습니다.
+
+## Product names
+
+The capture app is **ExhibitOS Capture** (previously CaptureSpike); the macOS processing app is **ExhibitOS Processing** (previously Mac Processing). These are user-facing display names. Existing repository/source paths, command names, bundle identifiers, saved files and historical evidence retain their existing identifiers. Documentation naming does not establish that a newly named app package has shipped.
+
+
 ## GLB 중심 제작과 독립 실행 — 2026-10-21
 
-CaptureSpike와 Mac Processing은 선택적 제작 도구입니다. 지원되는 GLB가 있으면 두 앱의 설치·계정·서명·촬영 이력이나 OES/별도 메타데이터 파일 없이 Studio에서 작품을 만들 수 있습니다. 제목·작가·실측 치수·권한·출처는 Studio에서 입력하며, 사용자 제공 출처를 인증된 촬영 기록으로 간주하지 않습니다. Studio/Platform이 전시 구성과 새 OEX 내보내기를 담당하며 기존 OEX 가져오기는 유지합니다. 공개 컴포넌트는 비공개 앱/operations 저장소 없이 자체 빌드·운영하는 경계를 유지합니다. 설정한 자체 서버·DB·계정을 사용하며 중앙 ExhibitOS 계정을 요구하지 않습니다. 실제 설치·지원 제한과 남은 검증은 각 버전의 안내를 따르세요. [GLB 가져오기](artist/import.md)로 시작할 수 있습니다. 역할 결정은 새 UI·공식 배포 완료를 뜻하지 않습니다.
+ExhibitOS Capture와 ExhibitOS Processing은 선택적 제작 도구입니다. 지원되는 GLB가 있으면 두 앱의 설치·계정·서명·촬영 이력이나 OES/별도 메타데이터 파일 없이 Studio에서 작품을 만들 수 있습니다. 제목·작가·실측 치수·권한·출처는 Studio에서 입력하며, 사용자 제공 출처를 인증된 촬영 기록으로 간주하지 않습니다. Studio/Platform이 전시 구성과 새 OEX 내보내기를 담당하며 기존 OEX 가져오기는 유지합니다. 공개 컴포넌트는 비공개 앱/operations 저장소 없이 자체 빌드·운영하는 경계를 유지합니다. 설정한 자체 서버·DB·계정을 사용하며 중앙 ExhibitOS 계정을 요구하지 않습니다. 실제 설치·지원 제한과 남은 검증은 각 버전의 안내를 따르세요. [GLB 가져오기](artist/import.md)로 시작할 수 있습니다. 역할 결정은 새 UI·공식 배포 완료를 뜻하지 않습니다.
 
 > 최신 1차 범위: [iPhone 촬영 → Mac 최종 처리](artist/mac-processing-first-release.md). 과거 지원 후보나 iPhone 최종 처리 안내보다 이 사용자 결정이 우선합니다. 실제 통과 범위는 각 검사 기록을 확인하세요.
 
