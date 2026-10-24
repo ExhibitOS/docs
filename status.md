@@ -6,8 +6,10 @@
 
 일반 시작 경로는 [처음 시작하기](start-here.md)에서 확인합니다. Manager의 환경 준비→설치→시작→브라우저 Studio, 작품 가져오기→배치→저장→관객 미리보기→공개 준비와 Viewer의 관람 시작 흐름으로 안내를 갱신했습니다. 문서 갱신을 실제 새 컴퓨터 설치·정식 앱 배포·실기기·전체 품질 검증으로 계산하지 않습니다.
 
+아래 사용 순서는 기존 웹 Studio 경로의 안내입니다. SwiftUI/AppKit 통합 제작·Docker 없는 실행·무로그인 개인 제작·몰입형 Viewer의 방향과 한정된 개발 검증 범위는 [아키텍처 정본](https://github.com/ExhibitOS/platform/blob/main/docs/architecture.md#repository-roles-build-boundaries)을 참조하세요. 이를 정식 설치 파일 제공이나 전체 네이티브 GUI·사용자 설치 수락으로 해석하지 않습니다.
+
 - **Manager:** Mac용 Developer ID 서명·Apple 공증 후 웹사이트 배포 방향. 정식 배포판·신규 컴퓨터 설치 자격 검증은 미완료입니다. 인증서 없는 로컬 소스 빌드는 별도 개발 경로입니다.
-- **Capture / Mac Processing:** 선택 도구입니다. iPhone 원본 전달→Mac 최종 재구성·검토·내보내기를 사용하며 공식 Mac Processing 스토어 배포와 Capture 일반 설치는 준비 중입니다. Platform은 호환 파일로 독립 사용할 수 있습니다.
+- **ExhibitOS Capture / ExhibitOS Processing:** 선택 도구입니다. iPhone 원본 전달→Mac 최종 재구성·검토·내보내기를 사용하며 공식 ExhibitOS Processing 스토어 배포와 Capture 일반 설치는 준비 중입니다. Platform은 호환 파일로 독립 사용할 수 있습니다.
 - **인터넷 전시:** Cloudflare Pages 정적 단독과 선택적 Render 동적 서버·Render PostgreSQL. 로컬 제작에 계정·토큰은 필요하지 않습니다. 실제 원격 배포와 복원 증거는 사용하는 버전의 기록을 확인해야 합니다.
 - **관람:** Safari·Chrome 대상, 공식 검증 환경은 macOS·iOS. Windows·Linux Chrome은 호환 후보이고 해당 OS의 실제 검사 전 지원 완료로 표시하지 않습니다.
 - **보류:** Windows/Linux 네이티브·Android·iPhone 최종 처리·Node 재구성·범용 원격 배포·XR/Federation/기관 고급 연동은 1차 필수 대상이 아닙니다. 기존 구현·결과는 보존합니다.
