@@ -2,19 +2,25 @@
 
 > 최신 1차 범위: [iPhone 촬영 → Mac 최종 처리](artist/mac-processing-first-release.md). 과거 지원 후보나 iPhone 최종 처리 안내보다 이 사용자 결정이 우선합니다. 실제 통과 범위는 각 검사 기록을 확인하세요.
 
-## 현재 1차 방향과 실제 배포 상태 · 2026-10-17
+## 현재 제작 경로와 제공 상태 · 2026-10-25
 
-일반 시작 경로는 [처음 시작하기](start-here.md)에서 확인합니다. Manager의 환경 준비→설치→시작→브라우저 Studio, 작품 가져오기→배치→저장→관객 미리보기→공개 준비와 Viewer의 관람 시작 흐름으로 안내를 갱신했습니다. 문서 갱신을 실제 새 컴퓨터 설치·정식 앱 배포·실기기·전체 품질 검증으로 계산하지 않습니다.
+현재 제작 방향은 Mac Manager 안의 네이티브 편집과 Docker 없는 개인 작업 공간입니다. 기존 브라우저 Studio·서버 절차는 아래 날짜가 있는 호환 안내로 보존합니다. 소스 구현, 개발 앱 생성, 실제 조작 확인, 공식 설치·배포와 사람의 수락은 서로 다릅니다.
 
-아래 사용 순서는 기존 웹 Studio 경로의 안내입니다. SwiftUI/AppKit 통합 제작·Docker 없는 실행·무로그인 개인 제작·몰입형 Viewer의 방향과 한정된 개발 검증 범위는 [아키텍처 정본](https://github.com/ExhibitOS/platform/blob/main/docs/architecture.md#repository-roles-build-boundaries)을 참조하세요. 이를 정식 설치 파일 제공이나 전체 네이티브 GUI·사용자 설치 수락으로 해석하지 않습니다.
+| 대상 | 확인된 범위 | 아직 제공·확인되지 않은 범위 |
+| --- | --- | --- |
+| Manager | 네이티브에서 외부 GLB·PNG 등록, 권리·치수 입력, 배치·저장·다시 열기, OEX·정적 Viewer 출력의 한정된 실제 확인 | 정식 서명·공증 다운로드, 새 컴퓨터 설치 전체 수락, 모든 편집·충돌·접근성 검증 |
+| ExhibitOS Processing | 현재 소스의 UI를 다시 빌드한 로컬 개발 패키지와 실행 파일·런타임·라이선스 결속 확인; 기존 편집·GLB 결과 재사용 | 이 개발 패키지는 실행하지 않았습니다. 공식 서명·스토어 설치, sandbox 실행, 선택 도구 설치 감지·실행 GUI 수락은 미완료입니다. |
+| ExhibitOS Capture | 촬영 원본·EXCP를 Mac 처리 도구로 전달하는 선택 도구 | 일반 사용자 설치 경로와 최종 촬영 품질의 전체 수락 |
+| Viewer | 홈페이지에서 제공하는 세 회화의 정적 관람 데모. 제작 앱·API·DB·로그인 없이 관람 | 최신 표지·연속 감상 개발 수정의 공개 반영, 물리 모바일·지속 보행 성능·전체 화질 및 사람의 수락 |
+| 기존 자료 복구 | 기존 자료를 유지한 같은 후보의 취소·읽기 전용 원본 소유자 확인; 엔진 이용 불가 시 안전하게 거부 | 실제 원본 소유자가 확인되는 정상 경로, 실패 후 freeze 복구·이전 자료 cold reopen 전체 수락. 엔진 연결 불가는 ‘정지 확인’이 아닙니다. |
 
-- **Manager:** Mac용 Developer ID 서명·Apple 공증 후 웹사이트 배포 방향. 정식 배포판·신규 컴퓨터 설치 자격 검증은 미완료입니다. 인증서 없는 로컬 소스 빌드는 별도 개발 경로입니다.
-- **ExhibitOS Capture / ExhibitOS Processing:** 선택 도구입니다. iPhone 원본 전달→Mac 최종 재구성·검토·내보내기를 사용하며 공식 ExhibitOS Processing 스토어 배포와 Capture 일반 설치는 준비 중입니다. Platform은 호환 파일로 독립 사용할 수 있습니다.
-- **인터넷 전시:** Cloudflare Pages 정적 단독과 선택적 Render 동적 서버·Render PostgreSQL. 로컬 제작에 계정·토큰은 필요하지 않습니다. 실제 원격 배포와 복원 증거는 사용하는 버전의 기록을 확인해야 합니다.
-- **관람:** Safari·Chrome 대상, 공식 검증 환경은 macOS·iOS. Windows·Linux Chrome은 호환 후보이고 해당 OS의 실제 검사 전 지원 완료로 표시하지 않습니다.
-- **보류:** Windows/Linux 네이티브·Android·iPhone 최종 처리·Node 재구성·범용 원격 배포·XR/Federation/기관 고급 연동은 1차 필수 대상이 아닙니다. 기존 구현·결과는 보존합니다.
+정식 Manager 다운로드·Processing 스토어·Capture 일반 설치 링크는 아직 제공하지 않습니다. 로컬 개발 패키지를 공식 설치 앱으로 대체하지 않습니다. [처음 시작하기](start-here.md), [파일 제작](artist/studio.md), [관람](viewer/visit.md), [백업·복구](operator/backup.md)에서 현재 가능한 경로를 확인하세요. 새 개발 UX가 공개 데모에 이미 적용됐다고 가정하지 마세요.
 
-정적 Viewer·Studio 체험은 별도 API·DB·로그인·토큰 없이 제공하는 방향이며 이 문서에는 확인되지 않은 데모 URL을 넣지 않습니다. 현재 홈페이지와 사용 안내는 제품 정식 배포판 자체가 아닙니다.
+홈페이지의 데모 진입은 Viewer만 제공합니다. 고흐·Rembrandt·Cézanne 세 회화의 출처는 Metropolitan Museum of Art Open Access이며 해당 파일의 CC0·출처 고지를 유지합니다. 기관의 제휴·보증을 뜻하지 않습니다. 홈페이지의 합성 소개 이미지와 실제 전시 작품을 구분합니다. 작품·음원은 각각 제공된 출처·라이선스·변경 표시를 확인하며, 프로젝트 코드 라이선스를 사용자 작품이나 음원에 적용하지 않습니다.
+
+외부 도구의 지원 GLB·PNG는 Capture·Processing 설치나 영수증 없이 가져올 수 있습니다. 개인 로컬 제작과 별도 서버 운영·인터넷 공개의 계정·권한 조건은 구분합니다. Cloudflare Pages 정적 공개와 선택적 Render 서버·PostgreSQL은 배포별 실제 결과를 확인합니다.
+
+Safari·Chrome이 대상이고 macOS·iOS가 공식 검증 대상입니다. 물리 기기 검사 전 지원 완료를 뜻하지 않습니다. Windows/Linux Chrome은 호환 후보입니다. Windows/Linux 네이티브·Android·iPhone 최종 처리·Node 재구성·범용 원격 배포·XR/Federation/기관 고급 연동은 보류입니다. 출입구 마감·명판·벤치의 기본 제작 범위는 이 고급 기능 보류에 포함하지 않습니다.
 
 ## 과거 개발 snapshot과 근거
 
